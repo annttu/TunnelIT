@@ -1,0 +1,18 @@
+---
+
+type: fortivpn
+# Path to forticonfig file
+config_file: ~/.vpn/forti-config
+# Details for keychain password item
+password_username: 'user@example.com'
+password_item: "vpn password"
+
+# Routes to add
+routes:
+ - 192.168.0.0/24
+
+# Domains and nameservers for those
+domains:
+  example.com:
+    - 192.168.0.2
+    - 192.168.0.4
