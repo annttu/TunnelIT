@@ -197,7 +197,10 @@ class TunnelIT(object):
 
     def load_config(self):
         name = os.path.basename(f"{self.name}.yaml")
-        with open(os.path.join(CONFIG_BASEPATH, name), 'r') as f:
+        config_file_path = os.path.join(CONFIG_BASEPATH, name)
+        if not os.path.isfile(config_file_path):
+            raise RuntimeError(f"No such configuration with name {self.name}")
+        with open(config_file_path, 'r') as f:
             config = yaml.load(f, yaml.SafeLoader)
         assert "type" in config
         self.config = config
@@ -249,6 +252,8 @@ class TunnelIT(object):
         self.unset_nameservers()
         self.unset_routes()
 
+        print(f"\033]1;VPN {self.name} Init\a")
+
         tunnel.start_tunnel(otp=otp)
 
         # Add routes and names etc
@@ -259,6 +264,7 @@ class TunnelIT(object):
         print("\033]6;1;bg;green;brightness;220\a")
         print("\033]6;1;bg;blue;brightness;0\a")
         print("\033]6;1;bg;red;brightness;0\a")
+        print(f"\033]1;VPN {self.name} OK\a")
 
         try:
             while tunnel.check_tunnel():
@@ -275,6 +281,7 @@ class TunnelIT(object):
         print("\033]6;1;bg;blue;brightness;0\a")
         print("\033]6;1;bg;red;brightness;220\a")
         print("\033]6;1;bg;*;default\a")
+        print(f"\033]1;VPN {self.name} END\a")
 
 
 def main():
